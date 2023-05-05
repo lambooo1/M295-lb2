@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 
 const app = express(); 
-const port = 3020
+const port = 3030
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -48,7 +48,15 @@ let tasks = [
 ]
 
 
-app.get("/tasks", (req, res) => {
+app.use("/tasks", function (req, res, next) {
+  if (req.session.email == null){
+    res.status(403).json({error: "not authenticated"})
+  }else{
+    next() 
+  }
+})
+
+app.get("/tasks", (req, res, next) => { 
   res.status(200).json(tasks)
 })
 
