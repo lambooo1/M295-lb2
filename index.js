@@ -61,14 +61,18 @@ app.get("/tasks", (req, res, next) => {
 })
 
 app.post("/tasks", (req, res) => {
-  let newTask = {}
+  if (req.body.Titel == null){
+    res.status(406).json({error: "task must have a title"})
+  }else{
+    let newTask = {}
   //for-loop inspiriert durch Ben Brändle 
   for (const value in req.body){
       newTask[value] = req.body[value]
   }
-  //mit dem Lehrer
+  //mit Lehrer
   tasks = [...tasks, newTask]
   res.status(201).json(newTask)
+  }  
 })
 
 //eigene Unterlagen
@@ -83,13 +87,17 @@ app.get("/tasks/:id", (req, res) => {
 }) 
 
 app.put("/tasks/:id", (req, res) => {
-  let putTask = {}
-  for (const value in req.body){
-    putTask[value] = req.body[value]
+  if (req.body.Titel == null){
+    res.status(406).json({error: "task must have a title"})
+  }else{
+    let putTask = {}
+    for (const value in req.body){
+      putTask[value] = req.body[value]
+    }
+    //eigene Unterlagen
+    tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
+    res.json(putTask) 
   }
-  //eigene Unterlagen
-  tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
-  res.json(putTask) 
 })
 
 app.delete("/tasks/:id", (req, res) => {
