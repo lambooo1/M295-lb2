@@ -41,7 +41,7 @@ let tasks = [
 ]
 
 app.get("/tasks", (req, res) => {
-    res.json(tasks)
+  res.status(200).json(tasks)
 })
 
 app.post("/tasks", (req, res) => {
@@ -52,31 +52,39 @@ app.post("/tasks", (req, res) => {
     }
     //mit dem Lehrer
     tasks = [...tasks, newTask]
-    res.json(newTask)
+    res.status(201).json(newTask)
 })
 
+//eigene Unterlagen
 app.get("/tasks/:id", (req, res) => {
-    try{
-        const findID = tasks.find(((task) => task.id === req.params.id))
-        //res.json
-        res.json(findID) 
-    }
-    catch{
-        res.sendStatus(404).send("Failed to get task.") 
-    } 
+      const findID = tasks.find(((task) => task.id === req.params.id))
+      //res.json
+      if (findID == null){
+        res.status(404).json({error: "task not found"})
+      }else{
+         res.status(200).json(findID)
+      }
 }) 
 
 app.put("/tasks/:id", (req, res) => {
-  let putTask = {}
-  for (const value in req.body){
-    putTask[value] = req.body[value]
-  }
-  //eigene Unterlagen
-  tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
-  res.json(putTask) 
+    let putTask = {}
+    for (const value in req.body){
+      putTask[value] = req.body[value]
+    }
+    //eigene Unterlagen
+    tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
+    res.json(putTask) 
 })
 
-
+app.delete("/tasks/:id", (req, res) => {
+    const deletedTask =  tasks.filter((t) => t.id === req.params.id)
+    tasks = tasks.filter((t) => t.id !== req.params.id); 
+    if (deletedTask == null){
+      res.sendStatus(404)
+    }else{
+      res.status(200).json(deletedTask)
+    }
+})
 
 app.listen(port, () => {
     console.log("Server ist gestartet.");
