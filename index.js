@@ -1,10 +1,17 @@
 import express from "express"; 
+import session from "express-session";
 
 const app = express(); 
 const port = 3020
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
+app.use(session({
+  secret: 'supersecret',
+	resave: false,
+	saveUninitialized: true,
+  cookie: {}
+}))
 
 //durch ChatGPT generiert
 let tasks = [
@@ -40,50 +47,89 @@ let tasks = [
       }      
 ]
 
+
 app.get("/tasks", (req, res) => {
   res.status(200).json(tasks)
 })
 
 app.post("/tasks", (req, res) => {
-    let newTask = {}
-    //for-loop inspiriert durch Ben Brändle 
-    for (const value in req.body){
-        newTask[value] = req.body[value]
-    }
-    //mit dem Lehrer
-    tasks = [...tasks, newTask]
-    res.status(201).json(newTask)
+  let newTask = {}
+  //for-loop inspiriert durch Ben Brändle 
+  for (const value in req.body){
+      newTask[value] = req.body[value]
+  }
+  //mit dem Lehrer
+  tasks = [...tasks, newTask]
+  res.status(201).json(newTask)
 })
 
 //eigene Unterlagen
 app.get("/tasks/:id", (req, res) => {
-      const findID = tasks.find(((task) => task.id === req.params.id))
-      //res.json
-      if (findID == null){
-        res.status(404).json({error: "task not found"})
-      }else{
-         res.status(200).json(findID)
-      }
+  const findID = tasks.find(((task) => task.id === req.params.id))
+  //res.json
+  if (findID == null){
+    res.status(404).json({error: "task not found"})
+  }else{
+      res.status(200).json(findID)
+  }
 }) 
 
 app.put("/tasks/:id", (req, res) => {
-    let putTask = {}
-    for (const value in req.body){
-      putTask[value] = req.body[value]
-    }
-    //eigene Unterlagen
-    tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
-    res.json(putTask) 
+  let putTask = {}
+  for (const value in req.body){
+    putTask[value] = req.body[value]
+  }
+  //eigene Unterlagen
+  tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
+  res.json(putTask) 
 })
 
 app.delete("/tasks/:id", (req, res) => {
-    const deletedTask =  tasks.filter((t) => t.id === req.params.id)
-    tasks = tasks.filter((t) => t.id !== req.params.id); 
-    if (deletedTask == null){
-      res.sendStatus(404)
-    }else{
-      res.status(200).json(deletedTask)
-    }
+  const deletedTask =  tasks.filter((t) => t.id === req.params.id)
+  tasks = tasks.filter((t) => t.id !== req.params.id); 
+  if (deletedTask == null){
+    res.sendStatus(404)
+  }else{
+    res.status(200).json(deletedTask)
+  }
+})
+
+const secretAdminCredentials = {email: "beispielmail", password: "m295"}
+//Unterlagen Moodle
+app.post("/login", (req, res) => {
+  const {email, password} = req.body
+  if (password == secretAdminCredentials.password){
+    req.session.email = email 
+
+    res.status(200).json({email: req.session.email})
+  }
+  else{
+    res.status(401).json({error: "Invalid credentials"})
+  }
+})
+
+//Unterlagen Moodle
+app.get("/verify", (req, res) => {
+  if (req.session.email){
+    res.status(200).json({email: req.session.email})
+  }else{
+    res.status(401).json({error: "You are not logged in"})
+  }
+})
+
+//Unterlagen Moodle
+app.delete("/logout", (req, res) => {
+  if (req.session.email){
+    req.session.email = null
+    res.status(204).send()
+  }else{
+    res.json({error: "logout not possible"}) 
+  }
+})
+
+//inspiriert durch Ben Brändle 
+app.get("/*", (req, res) => {
+  res.status(404).json({error: "Task not found"})
 })
 
 app.listen(port, () => {
