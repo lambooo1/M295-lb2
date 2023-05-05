@@ -19,31 +19,36 @@ let tasks = [
         "id": "1",
         "Titel": "Einkaufen gehen",
         "Erstellungsdatum": "2023-05-01",
-        "Erfüllungsdatum": "2023-05-02"
+        "Erfüllungsdatum": "2023-05-02",
+        "Autor": "max@bsp.com"
       },
       {
         "id": "2",
         "Titel": "Geburtstagsgeschenk kaufen",
         "Erstellungsdatum": "2023-04-29",
-        "Erfüllungsdatum": "2023-05-05"
+        "Erfüllungsdatum": "2023-05-05",
+        "Autor": "max@bsp.com"
       },
       {
         "id": "3",
         "Titel": "Wohnzimmer streichen",
         "Erstellungsdatum": "2023-04-30",
-        "Erfüllungsdatum": "2023-05-04"
+        "Erfüllungsdatum": "2023-05-04",
+        "Autor": "max@bsp.com"
       },
       {
         "id": "4",
         "Titel": "Buch lesen",
         "Erstellungsdatum": "2023-05-01",
-        "Erfüllungsdatum": null
+        "Erfüllungsdatum": null,
+        "Autor": "max@bsp.com"
       },
       {
         "id": "5",
         "Titel": "Flug buchen",
         "Erstellungsdatum": "2023-05-02",
-        "Erfüllungsdatum": null
+        "Erfüllungsdatum": null,
+        "Autor": "max@bsp.com"
       }      
 ]
 
@@ -56,7 +61,7 @@ app.use("/tasks", function (req, res, next) {
   }
 })
 
-app.get("/tasks", (req, res, next) => { 
+app.get("/tasks", (req, res) => { 
   res.status(200).json(tasks)
 })
 
@@ -69,6 +74,7 @@ app.post("/tasks", (req, res) => {
   for (const value in req.body){
       newTask[value] = req.body[value]
   }
+  newTask.Autor = req.session.email
   //mit Lehrer
   tasks = [...tasks, newTask]
   res.status(201).json(newTask)
@@ -94,6 +100,7 @@ app.put("/tasks/:id", (req, res) => {
     for (const value in req.body){
       putTask[value] = req.body[value]
     }
+    putTask.Autor = req.session.email 
     //eigene Unterlagen
     tasks = tasks.map((t) => t.id == putTask.id ? putTask : t)
     res.json(putTask) 
