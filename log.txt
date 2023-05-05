@@ -1,0 +1,55 @@
+commit 70a74fea95c9964865351be9e437a6bd868a87f3
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 14:48:30 2023 +0000
+
+    check Coderechtlinien
+
+commit e6c28be7648418207c01f76a78949a245d6c8d18
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 14:39:04 2023 +0000
+
+    create API.md file
+
+commit 6a38119b1cdff655f694c68850136f13a2445323
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 14:26:16 2023 +0000
+
+    add testing.md file
+
+commit e3d3f1618ec9063969100e82c54128e36be4139e
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 13:38:00 2023 +0000
+
+    add: autor to put and post
+
+commit 9ad5980f2a4fb9848e8451a844f9dafe82cae1d2
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 12:37:58 2023 +0000
+
+    check endpoints
+    check title of tasks
+
+commit 0ba017891cb7735becd359e9d5b022b6db4bd044
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 12:17:45 2023 +0000
+
+    add: function checkAthnticate
+
+commit 67a3b600182ac579144e3f769e5a83924f425f8a
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 11:43:25 2023 +0000
+
+    add: login, verify, delete
+
+commit 4cb73e05c44b8b6be5752a9ac38429557f25b99d
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 09:46:51 2023 +0000
+
+    add: put, delete
+
+commit a921e80c10f35a94ac72720b6f35cf6b5f2a2c2f
+Author: lambooo1 <logendranl@bzz.ch>
+Date:   Fri May 5 09:02:08 2023 +0000
+
+    add files
+    add get/post
